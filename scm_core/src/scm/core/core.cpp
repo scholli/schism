@@ -62,7 +62,7 @@ core::core(int argc, char **argv)
     scm::out() << scm::log::core::get() << log::end;
 }
 
-core::~core()
+core::~core() noexcept(false)
 {
     {
         log::logger_format_saver save_indent(scm::out().associated_logger());

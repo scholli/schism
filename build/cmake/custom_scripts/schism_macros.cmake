@@ -4,6 +4,45 @@
 
 #include(GetPrerequisites)
 
+# applying custom working directory for debugging
+macro(scm_apply_debug_working_directory)
+  if (MSVC)
+    configure_file(${CMAKE_SOURCE_DIR}/custom_scripts/schism.vcxproj.user.in ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.vcxproj.user @ONLY)
+  endif (MSVC)
+endmacro(scm_apply_debug_working_directory)
+
+# copy runtime libraries as a post-build process
+macro(scm_copy_external_runtime_libraries)
+  if (MSVC)
+    if (NOT SCM_RUNTIME_LIBRARIES)
+      FILE(GLOB_RECURSE _RUNTIME_LIBRARIES ${GLOBAL_EXT_DIR} ${GLOBAL_EXT_DIR}/*.dll)
+      SET(SCM_RUNTIME_LIBRARIES ${_RUNTIME_LIBRARIES} CACHE INTERNAL "Runtime libraries.")
+    endif (NOT SCM_RUNTIME_LIBRARIES)
+
+   #foreach(_LIB ${SCM_RUNTIME_LIBRARIES})
+   #  get_filename_component(_FILE ${_LIB} NAME)
+   #  get_filename_component(_PATH ${_LIB} DIRECTORY)
+   #  SET(COPY_DLL_COMMAND_STRING ${COPY_DLL_COMMAND_STRING} robocopy \"${_PATH}\" \"${EXECUTABLE_OUTPUT_PATH}/$(Configuration)/\" ${_FILE} /R:0 /W:0 /NP &)
+   #endforeach()
+
+    foreach(dll_path ${SCM_RUNTIME_LIBRARIES})
+      if (EXISTS ${dll_path})
+			  # make if fail for the wrong configuration
+			  string(REPLACE /${conf}/ "/$<CONFIGURATION>/" dll_path ${dll_path})
+			  add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+									  COMMAND if EXIST ${dll_path} ${CMAKE_COMMAND} -E echo "copying ${link_lib_dll} to ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/$<CONFIGURATION>/"
+									  COMMAND if EXIST ${dll_path} ${CMAKE_COMMAND} -E copy_if_different ${dll_path} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/$<CONFIGURATION>/)
+		  endif (EXISTS ${dll_path})
+    endforeach()
+
+    #SET(COPY_DLL_COMMAND_STRING ${COPY_DLL_COMMAND_STRING} robocopy \"${LIBRARY_OUTPUT_PATH}/$(Configuration)/\" \"${EXECUTABLE_OUTPUT_PATH}/$(Configuration)/\" *.dll /R:0 /W:0 /NP &)
+    #ADD_CUSTOM_COMMAND ( TARGET ${_EXE_NAME} POST_BUILD COMMAND ${COPY_DLL_COMMAND_STRING} \n if %ERRORLEVEL% LEQ 7 (exit /b 0) else (exit /b 1))
+  endif (MSVC)
+endmacro(scm_copy_external_runtime_libraries)
+
+
+
+
 macro(scm_project_files)
     set(out_file_list     ${ARGV0})
     set(in_project_path   ${ARGV1})

@@ -28,6 +28,10 @@ if (WIN32)
     if (MSVC12)
         set (SCM_COMPILER_SUFFIX "vc120")
     endif(MSVC12)
+
+    if (MSVC14)
+        set (SCM_COMPILER_SUFFIX "vc140")
+    endif(MSVC14)
 endif (WIN32)
 
 if (UNIX)

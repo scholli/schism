@@ -44,7 +44,7 @@ public:
 
 public:
     core(int argc, char **argv/*, app_type t = gui_application || console_application || etc.*/);
-    virtual ~core();
+    virtual ~core() noexcept(false);
 
     static bool                             check_instance();
     static core&                            instance();

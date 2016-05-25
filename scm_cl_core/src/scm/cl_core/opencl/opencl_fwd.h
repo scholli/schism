@@ -20,9 +20,8 @@ class BufferGL;
 class BufferRenderGL;
 class Image;
 class Image2D;
-class Image2DGL;
 class Image3D;
-class Image3DGL;
+class ImageGL;
 class Sampler;
 class Program;
 class CommandQueue;
@@ -58,9 +57,8 @@ using ::cl::BufferGL;
 using ::cl::BufferRenderGL;
 using ::cl::Image;
 using ::cl::Image2D;
-using ::cl::Image2DGL;
 using ::cl::Image3D;
-using ::cl::Image3DGL;
+using ::cl::ImageGL;
 using ::cl::Sampler;
 using ::cl::Program;
 using ::cl::CommandQueue;
@@ -100,14 +98,14 @@ typedef scm::shared_ptr<Image const>  image_cptr;
 typedef scm::shared_ptr<Image2D>        image_2d_ptr;
 typedef scm::shared_ptr<Image2D const>  image_2d_cptr;
 
-typedef scm::shared_ptr<Image2DGL>        image_2d_gl_ptr;
-typedef scm::shared_ptr<Image2DGL const>  image_2d_gl_cptr;
+typedef scm::shared_ptr<ImageGL>        image_2d_gl_ptr;
+typedef scm::shared_ptr<ImageGL const>  image_2d_gl_cptr;
 
 typedef scm::shared_ptr<Image3D>        image_3d_ptr;
 typedef scm::shared_ptr<Image3D const>  image_3d_cptr;
 
-typedef scm::shared_ptr<Image3DGL>        image_3d_gl_ptr;
-typedef scm::shared_ptr<Image3DGL const>  image_3d_gl_cptr;
+typedef scm::shared_ptr<ImageGL>        image_3d_gl_ptr;
+typedef scm::shared_ptr<ImageGL const>  image_3d_gl_cptr;
 
 typedef scm::shared_ptr<Sampler>        sampler_ptr;
 typedef scm::shared_ptr<Sampler const>  sampler_cptr;

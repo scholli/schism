@@ -5,9 +5,7 @@
 project(ex_volume_ray_cast_cuda)
 
 include(schism_project)
-include(schism_boost)
 include(schism_macros)
-include(schism_qt5)
 
 IF (NOT ${SCM_ENABLE_CUDA_CL_SUPPORT})
   message("Warning: Ignoring target ex_volume_ray_cast_cuda: Please enable SCM_ENABLE_CUDA_CL_SUPPORT to build this example.")
@@ -31,9 +29,7 @@ scm_project_files(HEADER_FILES      ${SRC_DIR}/renderer *.h *.inl)
 scm_project_files(SHADER_FILES      ${SRC_DIR}/renderer/shader *.glsl *.glslh *.glslf *.glslv *glslg *.glsltc *.glslte)
 scm_project_files(KERNEL_FILES      ${SRC_DIR}/renderer/kernel *.cl *.clh *.cu *.h)
 
-scm_add_moc_command(SOURCE_FILES_GUI ${HEADER_FILES_GUI})
-list(APPEND HEADER_FILES ${HEADER_FILES_GUI})
-list(APPEND SOURCE_FILES ${SOURCE_FILES_GUI})
+set(CMAKE_AUTOMOC ON)
 
 # include header and inline files in source files for visual studio projects
 if (WIN32)
@@ -43,72 +39,51 @@ if (WIN32)
 endif (WIN32)
 
 # set include and lib directories
-scm_project_include_directories(ALL   ${SRC_DIR}
-                                      ${SCM_ROOT_DIR}/scm_core/src
-                                      ${SCM_ROOT_DIR}/scm_cl_core/src
-                                      ${SCM_ROOT_DIR}/scm_gl_core/src
-                                      ${SCM_ROOT_DIR}/scm_gl_util/src
-                                      ${SCM_ROOT_DIR}/scm_input/src
-                                      ${SCM_BOOST_INC_DIR}
-                                      ${SCM_QT5_INC_DIR})
-
-scm_project_include_directories(WIN32 ${GLOBAL_EXT_DIR}/inc
-                                      ${GLOBAL_EXT_DIR}/inc/cuda
-                                      ${GLOBAL_EXT_DIR}/inc/freeimage)
-scm_project_include_directories(UNIX  /opt/OpenCL/include
-                                      /opt/cuda/current/cuda/include)
-
-#scm_cuda_project_include_directories( ${GLOBAL_EXT_DIR}/inc
-#                                      ${GLOBAL_EXT_DIR}/inc/cuda)
-#message(${PROJECT_NAME} ${SCM_CUDA_NVCC_INCLUDE_DIRECTORIES})
+include_directories(${SRC_DIR}
+                    ${SCM_ROOT_DIR}/scm_core/src
+                    ${SCM_ROOT_DIR}/scm_gl_core/src
+                    ${SCM_ROOT_DIR}/scm_gl_util/src
+					          ${SCM_ROOT_DIR}/scm_cl_core/src
+					          ${SCM_ROOT_DIR}/scm_input/src
+					          ${Qt5Widgets_INCLUDE_DIRS}
+					          ${Qt5Core_INCLUDE_DIRS}
+					          ${Qt5Gui_INCLUDE_DIRS}
+					          ${CUDA_TOOLKIT_INCLUDE}
+)
 
 # set library directories
-scm_project_link_directories(ALL      ${SCM_LIB_DIR}/${SCHISM_PLATFORM}
-                                      ${SCM_BOOST_LIB_DIR}
-                                      ${SCM_QT5_LIB_DIR})
-scm_project_link_directories(UNIX     /opt/cuda/current/cuda/lib64
-                                      /usr/lib/nvidia-current)
-
-#scm_project_link_directories(WIN32    ${GLOBAL_EXT_DIR}/lib)
-#scm_project_link_directories(UNIX     )
+scm_project_link_directories(ALL      ${SCM_LIB_DIR}/${SCHISM_PLATFORM})
 
 # add/create library
-#set(cu_output "")
-#message(${KERNEL_FILES})
-scm_cuda_add_nvcc_prepass(cu_output ${KERNEL_FILES})
-#message(${cu_output})
-add_executable(${PROJECT_NAME} ${SOURCE_FILES} ${cu_output})
+if (${MSVC_VERSION} GREATER 1800)
+  message("${PROJECT_NAME} : Warning: CUDA currently does not support Visual Studio 2015 or higher.")
+endif()
+
+cuda_add_executable(${PROJECT_NAME} ${SOURCE_FILES} ${KERNEL_FILES})
 
 # link libraries
-scm_link_libraries(ALL
-    general scm_core
-    general scm_cl_core
-    general scm_gl_core
-    general scm_gl_util
+target_link_libraries(${PROJECT_NAME}
+                      general scm_core
+                      general scm_gl_core
+	                    general scm_cl_core
+                      general scm_gl_util
+	                    Qt5::Widgets
+	                    Qt5::Core
+	                    Qt5::Gui
+)
 
-	general cuda
-	general cudart
-)
-scm_link_libraries(WIN32
-    optimized libboost_filesystem-${SCM_BOOST_MT_REL}       debug libboost_filesystem-${SCM_BOOST_MT_DBG}
-    optimized libboost_program_options-${SCM_BOOST_MT_REL}  debug libboost_program_options-${SCM_BOOST_MT_DBG}
-    optimized Qt5Core       debug Qt5Cored
-    optimized Qt5Gui        debug Qt5Guid
-    optimized Qt5Widgets    debug Qt5Widgetsd
-    optimized FreeImage     debug FreeImaged
-    optimized FreeImagePlus debug FreeImagePlusd
-)
-scm_link_libraries(UNIX
-    general boost_filesystem${SCM_BOOST_MT_REL}
-    general boost_program_options${SCM_BOOST_MT_REL}
-    general QtCore
-    general QtGui
-)
-scm_copy_schism_libraries()
+if (${SCM_ENABLE_CUDA_CL_SUPPORT})
+  target_link_libraries(${PROJECT_NAME} ${OpenCL_LIBRARY})
+endif (${SCM_ENABLE_CUDA_CL_SUPPORT})
 
 add_dependencies(${PROJECT_NAME}
-    scm_core
-    scm_cl_core
-    scm_gl_core
-    scm_gl_util
+                 scm_core
+                 scm_cl_core
+                 scm_gl_core
+                 scm_gl_util
 )
+
+# custom copy and debugging actions
+scm_copy_schism_libraries()
+scm_copy_external_runtime_libraries()
+scm_apply_debug_working_directory()

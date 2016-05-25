@@ -43,7 +43,7 @@ opencl_volume_data::opencl_volume_data(const gl::render_device_ptr& device,
               << "before creating volume gl image:" << log::nline
               << os.str() << log::end;
     }
-    _volume_image.reset(new cl::Image3DGL(*cl_device->cl_context(), CL_MEM_READ_ONLY,
+    _volume_image.reset(new ::cl::ImageGL(*cl_device->cl_context(), CL_MEM_READ_ONLY,
                                             voldata->volume_raw()->object_target(), 0,
                                             voldata->volume_raw()->object_id(), &cl_error));
     if (CL_SUCCESS != cl_error) {
@@ -61,7 +61,7 @@ opencl_volume_data::opencl_volume_data(const gl::render_device_ptr& device,
               << os.str() << log::end;
     }
 
-    _color_alpha_image.reset(new cl::Image2DGL(*cl_device->cl_context(), CL_MEM_READ_ONLY,
+    _color_alpha_image.reset(new ::cl::ImageGL(*cl_device->cl_context(), CL_MEM_READ_ONLY,
                                                voldata->color_alpha_map()->object_target(), 0,
                                                voldata->color_alpha_map()->object_id(), &cl_error));
     if (CL_SUCCESS != cl_error) {

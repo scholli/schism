@@ -12,7 +12,7 @@
 #include <boost/io/ios_state.hpp>
 
 #include <scm/cl_core/opencl.h>
-#include <scm/cl_core/opencl/CL/cl.hpp>
+#include <CL/cl.hpp>
 
 namespace scm {
 namespace cl {

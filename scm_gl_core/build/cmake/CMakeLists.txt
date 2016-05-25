@@ -7,7 +7,6 @@ project(scm_gl_core)
 option(SCHISM_OPT_BUILD_deprecated_classic_scm_gl  "Build deprecated classic scm_gl library (namespace scm::gl_classic"     OFF)
 
 include(schism_macros)
-include(schism_boost)
 
 set(SRC_DIR                         "${scm_gl_core_SOURCE_DIR}/../../src/scm")
 set(SCM_PROJECT_SOURCE_DIR          ${SRC_DIR})
@@ -122,26 +121,16 @@ endif (WIN32)
 
 
 # set include and lib directories
-scm_project_include_directories(ALL   ${SCM_ROOT_DIR}/scm_core/src
-                                      ${SCM_ROOT_DIR}/scm_gl_core/src
-                                      ${SCM_BOOST_INC_DIR})
-scm_project_include_directories(WIN32 ${GLOBAL_EXT_DIR}/inc)
+include_directories(${SCM_ROOT_DIR}/scm_core/src
+                    ${SCM_ROOT_DIR}/scm_gl_core/src
+				   )
 
 IF (${SCM_ENABLE_CUDA_CL_SUPPORT})
-  scm_project_include_directories(ALL ${SCM_ROOT_DIR}/scm_cl_core/src )
+  include_directories(${SCM_ROOT_DIR}/scm_cl_core/src )
 ENDIF (${SCM_ENABLE_CUDA_CL_SUPPORT})  
 
 # set library directories
-scm_project_link_directories(ALL   ${SCM_LIB_DIR}/${SCHISM_PLATFORM}
-                                   ${SCM_BOOST_LIB_DIR})
-scm_project_link_directories(WIN32 ${GLOBAL_EXT_DIR}/lib)
-
-IF (${SCM_ENABLE_CUDA_CL_SUPPORT})
-  scm_project_link_directories(UNIX     /opt/cuda/current/cuda/lib64
-                                        /usr/lib/nvidia-current)
-ENDIF (${SCM_ENABLE_CUDA_CL_SUPPORT})  
-
-#scm_project_link_directories(UNIX  )
+link_directories(${SCM_LIB_DIR}/${SCHISM_PLATFORM})
 
 if (WIN32)
     # add preprocessor defines

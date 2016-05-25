@@ -5,7 +5,6 @@
 PROJECT(app_win32_device_test)
 
 include(schism_project)
-include(schism_boost)
 include(schism_macros)
 
 # source files
@@ -19,43 +18,36 @@ if (WIN32)
     endif (MSVC)
 endif (WIN32)
 
-scm_project_include_directories(ALL   ${SRC_DIR}
-                                      ${SCM_ROOT_DIR}/scm_core/src
-                                      ${SCM_ROOT_DIR}/scm_gl_core/src
-                                      ${SCM_ROOT_DIR}/scm_gl_util/src
-                                      ${SCM_BOOST_INC_DIR})
-scm_project_include_directories(WIN32 ${GLOBAL_EXT_DIR}/inc)
-#scm_project_include_directories(UNIX  )
+include_directories(${SRC_DIR}
+                    ${SCM_ROOT_DIR}/scm_core/src
+                    ${SCM_ROOT_DIR}/scm_gl_core/src
+                    ${SCM_ROOT_DIR}/scm_gl_util/src
+				            ${GLUT_INCLUDE_DIR}
+)
 
-# set library directories
-scm_project_link_directories(ALL   ${SCM_LIB_DIR}/${SCHISM_PLATFORM}
-                                   ${SCM_BOOST_LIB_DIR})
-scm_project_link_directories(WIN32 ${GLOBAL_EXT_DIR}/lib)
-#scm_project_link_directories(UNIX  )
+link_directories( ${SCM_ROOT_DIR} 
+                  ${FREEIMAGE_LIBRARY_DIR})
 
 # add/create library
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 
 # link libraries
-scm_link_libraries(ALL
-    general scm_core
-    general scm_gl_core
-    general scm_gl_util
+target_link_libraries(${PROJECT_NAME}
+                      scm_core
+                      scm_gl_core
+                      scm_gl_util
+	                    optimized ${FREEIMAGE_PLUS_LIBRARY} debug ${FREEIMAGE_PLUS_LIBRARY_DEBUG}
+	                    optimized ${FREEIMAGE_LIBRARY} debug ${FREEIMAGE_LIBRARY_DEBUG}
+	                    general ${FREETYPE_LIBRARY}
 )
-scm_link_libraries(WIN32
-    general freeglut
-    optimized FreeImage     debug FreeImaged
-    optimized FreeImagePlus debug FreeImagePlusd
-	  general opengl32
-)
-scm_link_libraries(UNIX
-    general freeglut
-	general GL
-)
-scm_copy_schism_libraries()
 
 add_dependencies(${PROJECT_NAME}
-    scm_core
-	scm_gl_core
-	scm_gl_util
+                 scm_core
+	               scm_gl_core
+	               scm_gl_util
 )
+
+# custom copy and debugging actions
+scm_copy_schism_libraries()
+scm_copy_external_runtime_libraries()
+scm_apply_debug_working_directory()

@@ -59,7 +59,7 @@ opencl_volume_renderer::opencl_volume_renderer(const gl::render_device_ptr& devi
         }
 
         cl_int cl_error = CL_SUCCESS;
-        _output_cl_image.reset(new cl::Image2DGL(*cl_device->cl_context(), CL_MEM_WRITE_ONLY, // CL_MEM_READ_WRITE,
+        _output_cl_image.reset(new cl::ImageGL(*cl_device->cl_context(), CL_MEM_WRITE_ONLY, // CL_MEM_READ_WRITE,
                                                  _output_texture->object_target(), 0,
                                                  _output_texture->object_id(), &cl_error));
         if (CL_SUCCESS != cl_error) {

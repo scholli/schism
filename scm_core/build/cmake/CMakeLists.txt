@@ -5,7 +5,6 @@
 project(scm_core)
 
 include(schism_macros)
-include(schism_boost)
 
 set(SRC_DIR                         "${scm_core_SOURCE_DIR}/../../src/scm")
 set(SCM_PROJECT_SOURCE_DIR          ${SRC_DIR})
@@ -74,14 +73,7 @@ if (WIN32)
 endif (WIN32)
 
 # set include and lib directories
-scm_project_include_directories(ALL   ${SCM_ROOT_DIR}/scm_core/src
-                                      ${SCM_BOOST_INC_DIR})
-scm_project_include_directories(WIN32 ${GLOBAL_EXT_DIR}/inc)
-
-scm_project_link_directories(ALL   ${SCM_LIB_DIR}/${SCHISM_PLATFORM}
-                                   ${SCM_BOOST_LIB_DIR})
-scm_project_link_directories(WIN32 ${GLOBAL_EXT_DIR}/lib)
-#scm_project_link_directories(UNIX )
+include_directories(${SCM_ROOT_DIR}/scm_core/src)
 
 if (WIN32)
     # add preprocessor defines
@@ -103,20 +95,11 @@ set_target_properties( ${PROJECT_NAME}
 )
 
 # link libraries
-scm_link_libraries(WIN32
-    optimized libboost_chrono-${SCM_BOOST_MT_REL}           debug libboost_chrono-${SCM_BOOST_MT_DBG}
-    optimized libboost_date_time-${SCM_BOOST_MT_REL}        debug libboost_date_time-${SCM_BOOST_MT_DBG}
-    optimized libboost_filesystem-${SCM_BOOST_MT_REL}       debug libboost_filesystem-${SCM_BOOST_MT_DBG}
-    optimized libboost_program_options-${SCM_BOOST_MT_REL}  debug libboost_program_options-${SCM_BOOST_MT_DBG}
-    optimized libboost_system-${SCM_BOOST_MT_REL}           debug libboost_system-${SCM_BOOST_MT_DBG}
-    optimized libboost_timer-${SCM_BOOST_MT_REL}            debug libboost_timer-${SCM_BOOST_MT_DBG}
-)
-scm_link_libraries(UNIX
-    rt
-    boost_chrono${SCM_BOOST_MT_REL}
-    boost_date_time${SCM_BOOST_MT_REL}
-    boost_filesystem${SCM_BOOST_MT_REL}
-    boost_program_options${SCM_BOOST_MT_REL}
-    boost_system${SCM_BOOST_MT_REL}
-    boost_timer${SCM_BOOST_MT_REL}
+target_link_libraries( ${PROJECT_NAME} 
+    optimized ${Boost_CHRONO_LIBRARY_RELEASE}           debug ${Boost_CHRONO_LIBRARY_DEBUG}    
+    optimized ${Boost_DATE_TIME_LIBRARY_RELEASE}        debug ${Boost_DATE_TIME_LIBRARY_DEBUG} 
+    optimized ${Boost_FILESYSTEM_LIBRARY_RELEASE}       debug ${Boost_FILESYSTEM_LIBRARY_DEBUG}
+    optimized ${Boost_PROGRAM_OPTIONS_LIBRARY_RELEASE}  debug ${Boost_PROGRAM_OPTIONS_LIBRARY_DEBUG}   
+    optimized ${Boost_SYSTEM_LIBRARY_RELEASE}           debug ${Boost_SYSTEM_LIBRARY_DEBUG}    
+    optimized ${Boost_TIMER_LIBRARY_RELEASE}            debug ${Boost_TIMER_LIBRARY_DEBUG}     
 )

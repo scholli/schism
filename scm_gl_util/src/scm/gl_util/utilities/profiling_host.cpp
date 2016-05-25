@@ -13,11 +13,11 @@
 #include <boost/io/ios_state.hpp>
 
 #include <scm/config.h>
-#include <scm/cl_core/opencl/CL/cl.hpp>
 
 #include <scm/core/time/cpu_accum_timer.h>
 
 #if SCM_ENABLE_CUDA_CL_SUPPORT
+#include <CL/cl.hpp>
 #include <scm/cl_core/cuda/accum_timer.h>
 #include <scm/cl_core/cuda/command_stream.h>
 #include <scm/cl_core/opencl/opencl_fwd.h>

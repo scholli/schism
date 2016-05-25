@@ -12,12 +12,14 @@ set(CMAKE_MODULE_PATH ${schism_SOURCE_DIR}/custom_scripts ${CMAKE_MODULE_PATH})
 
 include(schism_platform)
 include(schism)
-include(schism_compiler)
 
 option(SCM_ENABLE_CUDA_CL_SUPPORT         "Enable and OpenCL/CUDA functionality and OpenGL interoperability."                OFF)
 
 # set some directory constants
 set(GLOBAL_EXT_DIR ${schism_SOURCE_DIR}/../../externals)
+
+# find some dependencies
+include(schism_dependencies)
 
 # set debug library extension
 set(SCHISM_DEBUG_LIBRARY_EXTENSION -gd)
@@ -29,7 +31,7 @@ add_subdirectory(../../scm_gl_util/build/cmake  ${CMAKE_CURRENT_BINARY_DIR}/scm_
 add_subdirectory(../../scm_input/build/cmake    ${CMAKE_CURRENT_BINARY_DIR}/scm_input_out)
 
 IF (${SCM_ENABLE_CUDA_CL_SUPPORT})
-  include(schism_cuda)
+  #include(schism_cuda)
   add_subdirectory(../../scm_cl_core/build/cmake  ${CMAKE_CURRENT_BINARY_DIR}/scm_cl_core_out)
 ELSE (${SCM_ENABLE_CUDA_CL_SUPPORT})
   unset(SCHISM_CUDA_BUILD_COMPUTE20 CACHE)

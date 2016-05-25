@@ -619,7 +619,7 @@ int main(int argc, char **argv)
 
     // the stuff that has to be done
     glutInit(&argc, argv);
-    glutInitContextVersion(4, 2);
+    glutInitContextVersion(4, 4);
     glutInitContextProfile(GLUT_CORE_PROFILE);
     glutInitContextFlags(GLUT_DEBUG | GLUT_FORWARD_COMPATIBLE);
 

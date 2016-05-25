@@ -2,7 +2,6 @@
 PROJECT(app_example_template)
 
 include(schism_project)
-include(schism_boost)
 include(schism_macros)
 
 # source files

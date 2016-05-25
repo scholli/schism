@@ -5,7 +5,6 @@
 PROJECT(app_large_file)
 
 include(schism_project)
-include(schism_boost)
 include(schism_macros)
 
 # source files
@@ -40,10 +39,9 @@ add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 scm_link_libraries(ALL
     general scm_core
 )
-#scm_link_libraries(WIN32 XXX)
-#scm_link_libraries(UNIX  XXX)
-scm_copy_schism_libraries()
 
+scm_copy_schism_libraries()
+scm_copy_external_runtime_libraries()
 
 add_dependencies(${PROJECT_NAME}
     scm_core

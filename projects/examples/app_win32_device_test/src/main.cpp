@@ -289,16 +289,17 @@ int main(int argc, char **argv)
     using namespace scm::math;
 
     wm::display_ptr             _display1(new wm::display("\\\\.\\DISPLAY1"));
-    wm::display_ptr             _display2(new wm::display("\\\\.\\DISPLAY2"));
+    wm::display_ptr             _display2(new wm::display("\\\\.\\DISPLAY1"));
 
     wm::surface::format_desc    _pixel_format(FORMAT_RGBA_8, FORMAT_D24_S8, true);
     wm::window_ptr              _window1(new wm::window(_display1, "scm::wm test display 1",
-                                                        vec2i(0, 0), vec2ui(1920, 1200),
+                                                        vec2i(0, 0), vec2ui(640, 480),
                                                         _pixel_format));
+
     wm::window_ptr              _window2(new wm::window(_display2, "scm::wm test display 2",
-                                                        vec2i(0, 0), vec2ui(1680, 1050),
+                                                        vec2i(640, 0), vec2ui(640, 480),
                                                         _pixel_format));
-    wm::context::attribute_desc _context_attribs(4, 1);
+    wm::context::attribute_desc _context_attribs(4, 4);
     wm::context_ptr             _context1(new wm::context(_window1, _context_attribs));
     wm::context_ptr             _context2(new wm::context(_window2, _context_attribs));
 

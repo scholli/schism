@@ -17,13 +17,15 @@
 #include <boost/assign/list_of.hpp>
 #include <boost/thread/mutex.hpp>
 
-#include <scm/cl_core/opencl/CL/cl.hpp>
+#include <CL/cl.hpp>
+
+#if SCM_PLATFORM == SCM_PLATFORM_WINDOWS
+#include <windows.h>
+#endif // SCM_PLATFORM == SCM_PLATFORM_WINDOWS
 
 #if SCM_PLATFORM == SCM_PLATFORM_LINUX
-
 #include <X11/Xlib.h>
 #include <GL/glx.h>
-
 #endif // SCM_PLATFORM == SCM_PLATFORM_LINUX
 
 #include <scm/log.h>

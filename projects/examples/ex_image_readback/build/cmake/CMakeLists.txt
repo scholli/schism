@@ -10,9 +10,7 @@ IF (NOT ${SCM_ENABLE_CUDA_CL_SUPPORT})
 ENDIF (NOT ${SCM_ENABLE_CUDA_CL_SUPPORT})
 
 include(schism_project)
-include(schism_boost)
 include(schism_macros)
-include(schism_qt4)
 
 # source files
 scm_project_files(SOURCE_FILES      ${SRC_DIR} *.cpp)
@@ -30,9 +28,10 @@ scm_project_files(HEADER_FILES_GUI  ${SRC_DIR}/gui_support *.h *.inl)
 
 scm_project_files(SHADER_FILES      ${SRC_DIR}/shaders *.glslf *.glslv *glslg)
 
-scm_add_moc_command(SOURCE_FILES_GUI ${HEADER_FILES_GUI})
+QT4_WRAP_CPP(GENERATED_MOC_OUTPUT ${HEADER_FILES_GUI})
+
 list(APPEND HEADER_FILES ${HEADER_FILES_GUI})
-list(APPEND SOURCE_FILES ${SOURCE_FILES_GUI})
+list(APPEND SOURCE_FILES ${SOURCE_FILES_GUI} ${GENERATED_MOC_OUTPUT})
 
 # include header and inline files in source files for visual studio projects
 if (WIN32)
@@ -42,55 +41,35 @@ if (WIN32)
 endif (WIN32)
 
 # set include and lib directories
-scm_project_include_directories(ALL   ${SRC_DIR}
-                                      ${SCM_ROOT_DIR}/scm_core/src
-                                      ${SCM_ROOT_DIR}/scm_gl_core/src
-                                      ${SCM_ROOT_DIR}/scm_gl_util/src
-                                      ${SCM_ROOT_DIR}/scm_input/src
-                                      ${SCM_BOOST_INC_DIR}
-                                      ${SCM_QT4_INC_DIR})
-
-scm_project_include_directories(WIN32 ${GLOBAL_EXT_DIR}/inc
-	                                  ${GLOBAL_EXT_DIR}/inc/cuda
-                                      ${GLOBAL_EXT_DIR}/inc/freeimage)
+include_directories(${SRC_DIR}
+                    ${SCM_ROOT_DIR}/scm_core/src
+                    ${SCM_ROOT_DIR}/scm_gl_core/src
+                    ${SCM_ROOT_DIR}/scm_gl_util/src
+					          ${SCM_ROOT_DIR}/scm_input/src
+					          ${QT4_INCLUDE_DIR}
+					          ${CUDA_TOOLKIT_INCLUDE}
+)
 
 # set library directories
-scm_project_link_directories(ALL      ${SCM_LIB_DIR}/${SCHISM_PLATFORM}
-                                      ${SCM_BOOST_LIB_DIR}
-                                      ${SCM_QT4_LIB_DIR})
-
-scm_project_link_directories(WIN32    ${GLOBAL_EXT_DIR}/lib)
+scm_project_link_directories(ALL ${SCM_LIB_DIR}/${SCHISM_PLATFORM})
 
 # add/create library
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
+scm_copy_external_runtime_libraries()
 
 # link libraries
-scm_link_libraries(ALL
-    general scm_core
-    general scm_gl_core
-    general scm_gl_util
-    general scm_input
+target_link_libraries(${PROJECT_NAME}
+                      general scm_core
+                      general scm_gl_core
+                      general scm_gl_util
+	                    ${QT_QTCORE_LIBRARY}
+	                    ${QT_QTGUI_LIBRARY}
+	                    optimized ${Boost_THREAD_LIBRARY_RELEASE} debug ${Boost_THREAD_LIBRARY_DEBUG}
+)
 
-    general cuda
-    general cudart
-)
-scm_link_libraries(WIN32
-    optimized libboost_filesystem-${SCM_BOOST_MT_REL}       debug libboost_filesystem-${SCM_BOOST_MT_DBG}
-    optimized libboost_thread-${SCM_BOOST_MT_REL}           debug libboost_thread-${SCM_BOOST_MT_DBG}
-    optimized libboost_program_options-${SCM_BOOST_MT_REL}  debug libboost_program_options-${SCM_BOOST_MT_DBG}
-    optimized QtCore4       debug QtCored4
-    optimized QtGui4        debug QtGuid4
-    optimized FreeImage     debug FreeImaged
-    optimized FreeImagePlus debug FreeImagePlusd
-)
-scm_link_libraries(UNIX
-    general boost_filesystem${SCM_BOOST_MT_REL}
-    general boost_thread${SCM_BOOST_MT_REL}
-    general boost_program_options${SCM_BOOST_MT_REL}
-    general QtCore
-    general QtGui
-)
-scm_copy_schism_libraries()
+if (${SCM_ENABLE_CUDA_CL_SUPPORT})
+  target_link_libraries(${PROJECT_NAME} ${OpenCL_LIBRARY})
+endif (${SCM_ENABLE_CUDA_CL_SUPPORT})
 
 add_dependencies(${PROJECT_NAME}
     scm_core
@@ -98,3 +77,8 @@ add_dependencies(${PROJECT_NAME}
     scm_gl_util
     scm_input
 )
+
+# custom copy and debugging actions
+scm_copy_schism_libraries()
+scm_copy_external_runtime_libraries()
+scm_apply_debug_working_directory()

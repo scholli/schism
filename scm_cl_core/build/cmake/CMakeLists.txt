@@ -5,7 +5,6 @@
 project(scm_cl_core)
 
 include(schism_macros)
-include(schism_boost)
 
 #option(SCHISM_ENABLE_OPENCL         "Enable Use of OpenCL"                OFF)
 
@@ -40,20 +39,9 @@ endif (WIN32)
 
 
 # set include and lib directories
-scm_project_include_directories(ALL   ${SCM_ROOT_DIR}/scm_core/src
-                                      ${SCM_ROOT_DIR}/scm_cl_core/src
-                                      ${SCM_BOOST_INC_DIR})
-scm_project_include_directories(WIN32 ${GLOBAL_EXT_DIR}/inc
-	                                  ${GLOBAL_EXT_DIR}/inc/cuda)
-scm_project_include_directories(UNIX /opt/OpenCL/include
-	                             /opt/cuda/current/cuda/include)
-
-# set library directories
-scm_project_link_directories(ALL   ${SCM_LIB_DIR}/${SCHISM_PLATFORM}
-                                   ${SCM_BOOST_LIB_DIR})
-scm_project_link_directories(WIN32 ${GLOBAL_EXT_DIR}/lib)
-scm_project_link_directories(UNIX  /opt/cuda/current/cuda/lib64
-                                   /usr/lib/nvidia-current)
+include_directories(${SCM_ROOT_DIR}/scm_core/src
+                    ${SCM_ROOT_DIR}/scm_cl_core/src
+					          ${CUDA_TOOLKIT_INCLUDE})
 
 if (WIN32)
     # add preprocessor defines
@@ -68,6 +56,12 @@ else (SCHISM_BUILD_STATIC)
 	add_library(${PROJECT_NAME} SHARED ${SOURCE_FILES})
 endif (SCHISM_BUILD_STATIC)
 
+# set library directories
+target_link_libraries( ${PROJECT_NAME} 
+				               scm_core
+					             scm_gl_core
+					            )
+
 set_target_properties( ${PROJECT_NAME} 
                 PROPERTIES
                 DEBUG_OUTPUT_NAME ${PROJECT_NAME}${SCHISM_DEBUG_LIBRARY_EXTENSION}
@@ -75,26 +69,8 @@ set_target_properties( ${PROJECT_NAME}
 )
 
 # link libraries
-scm_link_libraries(ALL
-	scm_core
-	general cuda
-	general cudart
-)
-scm_link_libraries(WIN32
-    general opengl32
-)
-scm_link_libraries(UNIX
-    general GL
-)
-
-#if (SCHISM_ENABLE_OPENCL)
-    scm_link_libraries(WIN32
-        general OpenCL
-    )
-    scm_link_libraries(UNIX
-        general OpenCL
-    )
-#endif (SCHISM_ENABLE_OPENCL)
+target_link_libraries(${PROJECT_NAME} 
+					  scm_core)
 
 add_dependencies(${PROJECT_NAME}
     scm_core

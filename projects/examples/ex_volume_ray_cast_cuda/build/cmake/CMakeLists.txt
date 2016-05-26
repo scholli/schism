@@ -55,9 +55,11 @@ include_directories(${SRC_DIR}
 scm_project_link_directories(ALL      ${SCM_LIB_DIR}/${SCHISM_PLATFORM})
 
 # add/create library
-if (${MSVC_VERSION} GREATER 1800)
-  message("${PROJECT_NAME} : Warning: CUDA currently does not support Visual Studio 2015 or higher.")
-endif()
+if (MSVC)
+  if (${MSVC_VERSION} GREATER 1800)
+    message("${PROJECT_NAME} : Warning: CUDA currently does not support Visual Studio 2015 or higher.")
+  endif(${MSVC_VERSION} GREATER 1800)
+endif(MSVC)
 
 cuda_add_executable(${PROJECT_NAME} ${SOURCE_FILES} ${KERNEL_FILES})
 

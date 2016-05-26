@@ -158,7 +158,7 @@ scm_link_libraries(ALL
 
 IF (${SCM_ENABLE_CUDA_CL_SUPPORT})
   scm_link_libraries(ALL
-    general scm_cl_core
+    #general scm_cl_core
   )
 ENDIF (${SCM_ENABLE_CUDA_CL_SUPPORT})  
 
@@ -183,9 +183,6 @@ add_dependencies(${PROJECT_NAME}
 )
 
 IF (${SCM_ENABLE_CUDA_CL_SUPPORT})
-	add_dependencies(${PROJECT_NAME}
-		scm_cl_core
-	)
-ENDIF (${SCM_ENABLE_CUDA_CL_SUPPORT})  
-
+  #add_dependencies(${PROJECT_NAME} scm_cl_core)
+ENDIF(${SCM_ENABLE_CUDA_CL_SUPPORT})
 

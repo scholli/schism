@@ -49,6 +49,8 @@ if (WIN32 AND NOT DEFINED ENV{GLUT_ROOT_PATH})
 endif()
 find_package(GLUT REQUIRED)
 
+IF (${SCM_ENABLE_QT_EXAMPLES})
+
 # Qt4 (standard CMake script CMakeVersion > 3.0.2)
 list(APPEND CMAKE_PREFIX_PATH "${GLOBAL_EXT_DIR}/qt4")
 
@@ -74,6 +76,8 @@ find_package(Qt5Gui REQUIRED)
 find_package(Qt5Widgets REQUIRED)
 
 get_target_property(QtCore_location Qt5::Core LOCATION)
+
+ENDIF (${SCM_ENABLE_QT_EXAMPLES})
 
 # CUDA and OpenCL
 if (${SCM_ENABLE_CUDA_CL_SUPPORT}) 

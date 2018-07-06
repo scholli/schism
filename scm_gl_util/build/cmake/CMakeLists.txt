@@ -101,7 +101,7 @@ target_link_libraries(${PROJECT_NAME}
 					  general scm_input
 					  optimized ${FREEIMAGE_PLUS_LIBRARY} debug ${FREEIMAGE_PLUS_LIBRARY_DEBUG}
 					  optimized ${FREEIMAGE_LIBRARY} debug ${FREEIMAGE_LIBRARY_DEBUG}
-					  general ${FREETYPE_LIBRARY}
+					  optimized ${FREETYPE_LIBRARY_RELEASE} debug ${FREETYPE_LIBRARY_DEBUG}
 )
 
 add_dependencies(${PROJECT_NAME}

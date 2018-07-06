@@ -14,6 +14,7 @@ include(schism_platform)
 include(schism)
 
 option(SCM_ENABLE_CUDA_CL_SUPPORT         "Enable and OpenCL/CUDA functionality and OpenGL interoperability."                OFF)
+option(SCM_ENABLE_QT_EXAMPLES             "Enable Qt for example projects."                OFF)
 
 # set some directory constants
 set(GLOBAL_EXT_DIR ${schism_SOURCE_DIR}/../../externals)
@@ -48,5 +49,7 @@ ELSE (${SCM_ENABLE_CUDA_CL_SUPPORT})
   unset(SCM_CUDA_NVCC_PATH CACHE)
 ENDIF (${SCM_ENABLE_CUDA_CL_SUPPORT})
 
-# add subdirectories to projects
-add_subdirectory(${schism_SOURCE_DIR}/../../projects/build/cmake       ${CMAKE_BINARY_DIR}/projects_cmake_out)
+IF (${SCM_ENABLE_QT_EXAMPLES})
+  # add subdirectories to projects
+  add_subdirectory(${schism_SOURCE_DIR}/../../projects/build/cmake       ${CMAKE_BINARY_DIR}/projects_cmake_out)
+ENDIF (${SCM_ENABLE_QT_EXAMPLES})

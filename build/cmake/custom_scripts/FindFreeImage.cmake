@@ -3,6 +3,7 @@
 ##############################################################################
 SET(FREEIMAGE_SEARCH_DIRS
   ${GLOBAL_EXT_DIR}/freeimage/include
+  ${GLOBAL_EXT_DIR}/freeimage/Source
   ${GLOBAL_EXT_DIR}/freeimage/lib
   ${GLOBAL_EXT_DIR}/freeimage/x64
   ${GLOBAL_EXT_DIR}/freeimage/x64/Release

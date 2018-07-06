@@ -1,6 +1,9 @@
 # boost (standard CMake script CMakeVersion > 3.0.2)
 if (MSVC)
-  set(Boost_USE_STATIC_LIBS ON)
+  set(Boost_USE_STATIC_LIBS       ON)
+  set(Boost_USE_MULTITHREADED     ON)
+  set(Boost_USE_STATIC_RUNTIME    OFF)
+
   set(BOOST_ROOT ${GLOBAL_EXT_DIR}/boost)
   add_definitions( -DBOOST_ALL_NO_LIB )
 elseif (UNIX)

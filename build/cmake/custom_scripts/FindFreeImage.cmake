@@ -4,6 +4,11 @@
 SET(FREEIMAGE_SEARCH_DIRS
   ${GLOBAL_EXT_DIR}/freeimage/include
   ${GLOBAL_EXT_DIR}/freeimage/lib
+  ${GLOBAL_EXT_DIR}/freeimage/x64
+  ${GLOBAL_EXT_DIR}/freeimage/x64/Release
+  ${GLOBAL_EXT_DIR}/freeimage/x64/Debug
+  ${GLOBAL_EXT_DIR}/freeimage/Wrapper/FreeImagePlus/x64/Release
+  ${GLOBAL_EXT_DIR}/freeimage/Wrapper/FreeImagePlus/x64/Debug
   ${FREEIMAGE_ROOT}/include
   ${FREEIMAGE_ROOT}/lib
   /usr/include

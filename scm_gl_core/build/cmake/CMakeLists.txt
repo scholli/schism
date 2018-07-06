@@ -163,7 +163,7 @@ IF (${SCM_ENABLE_CUDA_CL_SUPPORT})
 ENDIF (${SCM_ENABLE_CUDA_CL_SUPPORT})  
 
 scm_link_libraries(WIN32
-    general opengl32
+    general opengl32 bcrypt
 )
 scm_link_libraries(UNIX
     general GL

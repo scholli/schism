@@ -8,6 +8,7 @@ SET(FREEIMAGE_SEARCH_DIRS
   ${GLOBAL_EXT_DIR}/freeimage/x64
   ${GLOBAL_EXT_DIR}/freeimage/x64/Release
   ${GLOBAL_EXT_DIR}/freeimage/x64/Debug
+  ${GLOBAL_EXT_DIR}/freeimage/Wrapper/FreeImagePlus
   ${GLOBAL_EXT_DIR}/freeimage/Wrapper/FreeImagePlus/x64/Release
   ${GLOBAL_EXT_DIR}/freeimage/Wrapper/FreeImagePlus/x64/Debug
   ${FREEIMAGE_ROOT}/include
@@ -22,6 +23,7 @@ SET(FREEIMAGE_SEARCH_DIRS
 message(STATUS "-- checking for FREEIMAGE")
 
 find_path(FREEIMAGE_INCLUDE_DIR NAMES FreeImage.h PATHS ${FREEIMAGE_SEARCH_DIRS})
+find_path(FREEIMAGEPLUS_INCLUDE_DIR NAMES FreeImagePlus.h PATHS ${FREEIMAGE_SEARCH_DIRS})
 
 find_library(FREEIMAGE_LIBRARY NAMES FreeImage.lib freeimage PATHS ${FREEIMAGE_SEARCH_DIRS} PATH_SUFFIXES release)
 find_library(FREEIMAGE_PLUS_LIBRARY NAMES FreeImagePlus.lib freeimageplus PATHS ${FREEIMAGE_SEARCH_DIRS} PATH_SUFFIXES release)

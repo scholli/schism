@@ -69,6 +69,7 @@ include_directories(${SCM_ROOT_DIR}/scm_core/src
                     ${SCM_ROOT_DIR}/scm_input/src
 					${FREEIMAGE_INCLUDE_DIR}
 				    ${FREETYPE_INCLUDE_DIR_freetype2}
+				${FREETYPE_INCLUDE_DIR_ft2build}
 					${CUDA_TOOLKIT_INCLUDE})
 
 # set library directories
